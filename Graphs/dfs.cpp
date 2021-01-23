@@ -48,5 +48,10 @@ int main() {
 	    visited[i] = false;
 	}
 	print(edges, n, 0, visited);
+	delete [] visited;
+	for (int i=0; i<n; i++) {
+	    delete [] edges[i];
+	}
+	delete [] edges;
 	return 0;
 }
