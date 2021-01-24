@@ -2,6 +2,9 @@
 
 // DFS implementaion using adjacancey matrix
 
+// This approach not working in disconnected graph
+// for disconnected graph we need to traverse the visited array
+
 #include <iostream>
 #include<bits/stdc++.h>
 using namespace std;
@@ -47,6 +50,13 @@ int main() {
 	for (int i=0; i<n; i++) {
 	    visited[i] = false;
 	}
+	/*
+	for disconnected graph
+	for (int i=0; i<n; i++) {
+	    if (!visited[i])
+	        print(edges, n, i, visited);
+	}
+	*/
 	print(edges, n, 0, visited);
 	delete [] visited;
 	for (int i=0; i<n; i++) {
