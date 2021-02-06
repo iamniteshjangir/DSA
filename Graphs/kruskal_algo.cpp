@@ -30,60 +30,66 @@ Sample Output 1 :
 #include<bits/stdc++.h>
 using namespace std;
 
-struct Edges {
-    int src;
-    int dest;
-    int weight;
+class Edge {
+    public:
+        int src;
+        int dest;
+        int weight;
 };
 
-bool sorter(Edges a, Edges b) {
-    if (a.weight < b.weight) {
-        return true;
-    }
-    return false;
+bool sorter(Edge a, Edge b) {
+    return a.weight < b.weight;
 }
 
-int get_parent(int current, int* parent) {
-    while(current != parent[current]) {
-        current = parent[current];
+int getParent(int* parent, int v) {
+    if (parent[v] == v) {
+        return v;
     }
-    return current;
+    return getParent(parent, parent[v]);
 }
 
-int main() {
-    int v,e;
-    cin >> v >> e;
-    Edges* edges = new Edges[e];
-    for (int i=0; i<e; i++) {
-        int s,d,w;
-        cin >> s >> d >> w;
-        edges[i].src = s;
-        edges[i].dest = d;
-        edges[i].weight = w;
-    }
-//     need to sort edges as per weight
-    sort(edges, edges+e, sorter);
-    int* parent = new int[v];
-    for (int i=0; i<v; i++) {
+void kruskal(Edge* edges, int n, int e) {
+    // create parent array for storing parents of vertices
+    int* parent = new int[n];
+    for (int i=0; i<n; i++) {
         parent[i] = i;
     }
-    int count = 0, i=0;
-    Edges* output = new Edges[v-1];
-    while(count < v-1) {
-        Edges current = edges[i];
-        int first_parent = get_parent(current.src, parent);
-        int second_parent = get_parent(current.dest, parent);
-        if (first_parent != second_parent) {
-            output[count++] = current;
-            parent[first_parent] = second_parent;
+    Edge* output = new Edge[n-1];
+    // cout << "hi";
+    sort(edges, edges+e, sorter);
+    
+    int count = 0, i = 0;
+    while(count < n-1) {
+        // get parent of src and dest
+        int firstParent = getParent(parent, edges[i].src);
+        int secondParent = getParent(parent, edges[i].dest);
+        // if both parent not equal then we have to
+        // add this edge
+        if (firstParent != secondParent) {
+            output[count] = edges[i];
+            count++;
+            parent[firstParent] = secondParent;
         }
         i++;
     }
-    for (int i=0; i<v-1; i++) {
-        if (output[i].src < output[i].dest) {
-            cout << output[i].src << " " << output[i].dest << " " << output[i].weight << endl;
-        } else {
-            cout << output[i].dest << " " << output[i].src << " " << output[i].weight << endl;
-        }
+    
+    for (int i=0; i<n-1; i++) {
+        cout << output[i].src << " " << output[i].dest << " " << output[i].weight << endl;
     }
+}
+
+int main() {
+	int v,e;
+	cin >> v >> e;
+	Edge* edges = new Edge[e];
+	for (int i=0; i<e; i++) {
+	    int v1, v2, w;
+	    cin >> v1 >> v2 >> w;
+	    edges[i].src = v1;
+	    edges[i].dest = v2;
+	    edges[i].weight = w;
+	}
+	
+	kruskal(edges, v, e);
+	return 0;
 }
