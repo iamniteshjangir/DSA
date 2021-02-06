@@ -55,7 +55,6 @@ void kruskal(Edge* edges, int n, int e) {
         parent[i] = i;
     }
     Edge* output = new Edge[n-1];
-    // cout << "hi";
     sort(edges, edges+e, sorter);
     
     int count = 0, i = 0;
